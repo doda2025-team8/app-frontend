@@ -1,0 +1,16 @@
+# Default Nginx configuration file for the frontend application
+
+server {
+    # Listen on the specified port from environment variable
+    listen       ${PORT};
+    server_name  localhost;
+
+    # Root directory of the application
+    root   /usr/share/nginx/html;
+    index  index.html;
+    
+    location / {
+        # Server all from the index file
+        try_files $uri $uri/ /index.html;
+    }    
+}
