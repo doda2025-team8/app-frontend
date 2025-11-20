@@ -23,7 +23,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "POST",
-      url: "./",
+      url: "/sms",
       data: JSON.stringify({ sms: sms, guess: guess }),
       contentType: "application/json",
       dataType: "json",
