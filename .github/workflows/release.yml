@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0  # Fetch all history for accurate version bumping
 
       - name: Parse version info from VERSION file
         id: extract_version
@@ -35,9 +36,19 @@ jobs:
           echo "version_minor=$MINOR" >> $GITHUB_ENV
           echo "version_patch=$PATCH" >> $GITHUB_ENV
 
-      - name: Set stable version for build
+      - name: Commit and Tag Stable Version
         run: |
-          echo "${{ env.VERSION_BASE }}" > VERSION  #set stable version for build
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          
+          echo "${{ env.VERSION_BASE }}" > VERSION
+          
+          git add VERSION
+          git commit -m "release: ${{ env.VERSION_BASE }} [skip ci]"
+          
+          git tag v${{ env.VERSION_BASE }}
+          
+          git push origin v${{ env.VERSION_BASE }}
     
       - name: Docker metadata
         id: meta
@@ -80,9 +91,6 @@ jobs:
           echo "Bumping from ${{ env.VERSION_BASE }} to $NEXT_VERSION"
           
           echo "$NEXT_VERSION" > VERSION
-          
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           
           git add VERSION
           git commit -m "chore(release): Bump version to $NEXT_VERSION after stable release [skip ci]."
