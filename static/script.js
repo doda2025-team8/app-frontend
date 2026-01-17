@@ -32,6 +32,17 @@ $(document).ready(function () {
     });
   });
 
+  $.ajax({
+      type: "POST",
+      url: "/sms/pageview", 
+      success: function() { console.log("Page view tracked"); },
+      error: function() { console.log("Failed to track page view"); }
+  });
+
+  function getSMS() {
+    return $("textarea").val().trim();
+  }
+
   function handleResult(res) {
     var wasRight = res.result == getGuess();
 
