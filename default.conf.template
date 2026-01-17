@@ -8,6 +8,8 @@ server {
     # Root directory of the application
     root   /usr/share/nginx/html;
     index  index.html;
+
+    include /etc/nginx/extra-conf/*.conf;
     
     location / {
         # Server all from the index file
